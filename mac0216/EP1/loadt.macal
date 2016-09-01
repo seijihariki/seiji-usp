@@ -1,0 +1,19 @@
+        EXTERN  loadt
+off     IS      $31
+s       IS      $32
+
+loadt   SETW    off,0
+        SUBU    s,rSP,16
+        LDOU    s,s,0
+        SETW    rX,1
+loop    INT     #80
+        JN      rA,end
+        STBU    rA,s,off
+        ADDU    off,off,1
+        JMP     loop
+end     SETW    rA,32
+        STBU    rA,s,off
+        ADDU    off,off,1
+        SETW    rA,0
+        STBU    rA,s,off
+        RET     1
