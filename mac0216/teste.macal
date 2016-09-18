@@ -1,6 +1,0 @@
-        EXTERN  main
-
-main    SETW rX,1
-w_i1:
-w_f1
-end     INT 0
