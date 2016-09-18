@@ -4,12 +4,13 @@
 char M[100000];
 
 typedef unsigned int uint;
-
-char* str = (char*)"Google was founded by Larry Page and Sergey Brin while they were Ph.D. students at Stanford University, California. Together, they own about 14 percent of its shares and control 56 percent of the stockholder voting power through supervoting stock. They incorporated Google as a privately held company on September 4, 1998. An initial public offering (IPO) took place on August 19, 2004, and Google moved to its new headquarters in Mountain View, California, nicknamed the Googleplex.\n\nIn August 2015, Google announced plans to reorganize its interests as a holding company called Alphabet Inc. When this restructuring took place on October 2, 2015, Google became Alphabet's leading subsidiary, as well as the parent for Google's Internet interests.";
+char str[10000];
 
 int main()
 {
-	uint cols = 20;
+	sprintf(str, "Google was founded by Larry Page and Sergey Brin while they were Ph.D. students at Stanford University, California. Together, they own about 14 percent of its shares and control 56 percent of the stockholder voting power through supervoting stock. They incorporated Google as a privately held company on September 4, 1998. An initial public offering (IPO) took place on August 19, 2004, and Google moved to its new headquarters in Mountain View, California, nicknamed the Googleplex.\n\nIn August 2015, Google announced plans to reorganize its interests as a holding company called Alphabet Inc. When this restructuring took place on October 2, 2015, Google became Alphabet's leading subsidiary, as well as the parent for Google's Internet interests.");
+
+	uint cols = 80;
 	char c = 1;
 	for(int i = 0, cnt = 0; c; i++) M[i] = c = str[cnt++];
 
@@ -26,12 +27,30 @@ int main()
 		uint b = 1;
 		uint dist = 0;
 		int i = 0;
-		for(c = M[pos + i]; c && c^10 && i < cols; i++)
+
+		char lastchar = 0;
+		bool last_line = false;
+
+		for(c = M[pos + i]; c && i < cols; i++)
 		{
 			//printf("char %c\n",c);
 			c = M[pos + i];
+			if(c == '\n' || lastchar == '\n') printf("%d vs %d\n", c, lastchar);
+			if (lastchar == 10 && c == 10)
+			{
+				last_line = true;
+				break;
+			}
 			if (c == 0x20) spaces++;
+			lastchar = c;
 		}
+		if (last_line)
+		{
+			pos += i + 1;
+			continue;
+		}
+		//printf("i at %d\n", i);
+		//printf("pos+i is %c\n", M[pos + i]);
 		if (M[pos + i] && M[pos + i]^0x20)
 		{
 			for(; b <= i; b++)
@@ -59,7 +78,6 @@ int main()
 		uint spc = 0;
 		i += pos;
 		//printf("i at %d\n", i);
-		bool last_line = false;
 
 		for(int z = pos; z <= i; z++)
 		{
@@ -77,7 +95,7 @@ int main()
 				spc++;
 				for(int k = 0; k < g + 1; k++) putchar(32);
 				if(spc > spaces - r) putchar(32);
-			}else putchar(c);
+			} else putchar(c);
 			if(!c)break;
 		}
 		if (!last_line) putchar(10);

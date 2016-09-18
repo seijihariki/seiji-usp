@@ -12,13 +12,15 @@ dist    IS      $18
 spc     IS      $19
 ll      IS      $20
 z       IS      $21
+lchar   IS      $22
 
 i       IS      $50
 
 cm      IS      $51
 tmp     IS      $52
 
-main    SUBU    cols,rSP,16
+main    NOP
+        SUBU    cols,rSP,16
         LDOU    cols,cols,0
         PUSH    cols
         CALL    strint
@@ -35,23 +37,40 @@ w1_i    SETW    spaces,0
         SETW    b,1
         SETW    dist,0
         SETW    i,0
+        SETW    ll,0
 
         LDBU    c,pos,i
 f1_i    JZ      c,f1_e
-        CMP     cm,c,10
-        JZ      cm,f1_e
         CMP     cm,i,cols
         JNN     cm,f1_e
         LDBU    c,pos,i
+
+ix_i    CMP     cm,lchar,10
+        JNZ     cm,ix_e
+        CMP     cm,c,10
+        JNZ     cm,ix_e
+        SETW    ll,1
+        JMP     f1_e
+ix_e    NOP
 
 i1_i    CMP     cm,c,32
         JNZ     cm,i1_e
         ADDU    spaces,spaces,1
 i1_e    NOP
 
+        ADDU    lchar,c,0
+
         ADD     i,i,1
         JMP     f1_i
 f1_e    NOP
+
+iy_i    JZ ll,iy_e
+        PUSH    pos
+        CALL    prl
+        ADD     pos,pos,i
+        JMP     w1ev
+iy_e    NOP
+
 i2_i    LDBU    cm,pos,i
         JZ      cm,i2el
         CMP     cm,cm,32
@@ -100,7 +119,6 @@ i2_e    NOP
 
         SETW    spc,0
         ADD     i,i,pos
-        SETW    ll,0
 
         ADD     z,pos,0
 f3_i    CMP     cm,z,i
@@ -148,6 +166,7 @@ i8_e    NOP
 
         JMP     i7_e
 i7el    ADDU    rY,c,0
+        JZ      rY,i7_e
         INT     #80
 i7_e    NOP
 
@@ -163,7 +182,8 @@ i0_i    JNZ     ll,i0_e
         SETW    rY,10
         INT     #80
 i0_e    NOP
-        ADDU    pos,pos,1
+
+w1ev    ADDU    pos,pos,1
 
         LDBU    tmp,pos,0
         JNZ     tmp,w1_i
