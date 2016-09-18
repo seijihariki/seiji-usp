@@ -94,7 +94,6 @@ i5_i    JZ      spaces,i5_e
 i5_e    NOP
 
 i4_e    NOP
-
         JMP     i2_e
 i2el    SUB     i,i,1
 i2_e    NOP
@@ -130,12 +129,11 @@ i7_i    CMP     cm,c,32
 
         ADDU    spc,spc,1
 
-        SETW    rY,32
-
         SETW    z,0
 f5_i    ADDU    tmp,g,1
         CMP     cm,z,tmp
         JNN     cm,f5_e
+        SETW    rY,32
         INT     #80
         ADD     z,z,1
         JMP     f5_i
@@ -144,6 +142,7 @@ f5_e    NOP
 i8_i    SUB     tmp,spaces,r
         CMP     cm,spc,tmp
         JNP     cm,i8_e
+        SETW    rY,32
         INT     #80
 i8_e    NOP
 

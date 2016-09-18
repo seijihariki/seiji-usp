@@ -1,11 +1,11 @@
 #include <cstdlib>
 #include <string>
 #include <cstdio>
-unsigned char M[100000];
+char M[100000];
 
 typedef unsigned int uint;
 
-char* str = (char*)"Google was founded by Larry Page and Sergey Brin while they were Ph.D. students at Stanford University, California. Together, they own about 14 percent of its shares and control 56 percent of the stockholder voting power through supervoting stock. They incorporated Google as a privately held company on September 4, 1998. An initial public offering (IPO) took place on August 19, 2004, and Google moved to its new headquarters in Mountain View, California, nicknamed the Googleplex.\n\n In August 2015, Google announced plans to reorganize its interests as a holding company called Alphabet Inc. When this restructuring took place on October 2, 2015, Google became Alphabet's leading subsidiary, as well as the parent for Google's Internet interests.";
+char* str = (char*)"Google was founded by Larry Page and Sergey Brin while they were Ph.D. students at Stanford University, California. Together, they own about 14 percent of its shares and control 56 percent of the stockholder voting power through supervoting stock. They incorporated Google as a privately held company on September 4, 1998. An initial public offering (IPO) took place on August 19, 2004, and Google moved to its new headquarters in Mountain View, California, nicknamed the Googleplex.\n\nIn August 2015, Google announced plans to reorganize its interests as a holding company called Alphabet Inc. When this restructuring took place on October 2, 2015, Google became Alphabet's leading subsidiary, as well as the parent for Google's Internet interests.";
 
 int main()
 {
@@ -14,7 +14,7 @@ int main()
 	for(int i = 0, cnt = 0; c; i++) M[i] = c = str[cnt++];
 
 	printf("Copied to memory\n");
-	printf("String is %s\n", &M);
+	printf("String is %s\n", M);
 
 	uint pos = 0;
 	do
