@@ -2,7 +2,7 @@
 #define TYPES_H
 
 typedef struct board_s board;
-typedef struct stack_s stack;
+typedef struct stack_s *stack;
 typedef struct move_s move;
 
 struct stack_s {

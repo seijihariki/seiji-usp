@@ -11,4 +11,5 @@ int pushStack(stack st, move mv);
 
 move popStack(stack st);
 
+void prinStack(stack st);
 #endif

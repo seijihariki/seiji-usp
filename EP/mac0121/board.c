@@ -34,6 +34,20 @@ board delBoard(board bd)
     return bd;
 }
 
+void printBoard(board bd)
+{
+    int x, y, i;
+    for(y = 0; y < bd.sy; y++)
+    {
+        for(x = 0; x < bd.sx - 1; x++)
+        {
+            i = getIBoard(bd, x, y);
+            printf("%d ", bd.data[i]);
+        }
+        printf("%d\n", bd.data[i + 1]);
+    }
+}
+
 void invertBoard(board bd)
 {
     int i;
@@ -87,7 +101,7 @@ int applyMove(board bd, move mv, int app)
 {
     int x, y, i, m;
     getXYBoard(bd, mv.i, &x, &y);
-    if(x < 0 || bd.data[mv.i] == -app) return 0;
+    if(x < 0 || bd.data[mv.i] != app) return 0;
     switch(mv.d)
     {
     case 0:
@@ -109,11 +123,12 @@ int applyMove(board bd, move mv, int app)
     default:
         return 0;
     }
+
     if(i < 0 || m < 0 || bd.data[i] == app || bd.data[m] == -app) return 0;
     
     bd.data[mv.i] = -app;
-    bd.data[i] = app;
     bd.data[m] = -app;
+    bd.data[i] = app;
 
     return 1;
 }
@@ -138,6 +153,39 @@ int eqBoard(board bd1, board bd2)
 move nextMove(move mv)
 {
     if(mv.d == 3) mv.i++;
-    mv.d = (mv.d + 4)%4;
+    mv.d = (mv.d + 1)%4;
     return mv;
+}
+
+void moveCoords(board bd, move mv, int *x0, int *y0, int *x1, int *y1, int *x2, int *y2)
+{
+    int x, y;
+    getXYBoard(bd, mv.i, &x, &y);
+    switch(mv.d)
+    {
+    case 0:
+        *x2 = *x1 = x;
+        *y1 = y - 1;
+        *y2 = y - 2;
+        break;
+    case 1:
+        *y2 = *y1 = y;
+        *x1 = x + 1;
+        *x2 = x + 2;
+        break;
+    case 2:
+        *x2 = *x1 = x;
+        *y1 = y + 1;
+        *y2 = y + 2;
+        break;
+    case 3:
+        *y2 = *y1 = y;
+        *x1 = x - 1;
+        *x2 = x - 2;
+        break;
+    default:
+        return;
+    }
+    *x0 = x;
+    *y0 = y;
 }
