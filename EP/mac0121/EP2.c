@@ -97,8 +97,8 @@ int main()
 	st = newStack(100);
 
     if(!solve(bd, st)) tmp = printf("Impossivel\n");
-	else printStack(bd, st);
-	delStack(st);
-	delBoard(bd);
+    else printStack(bd, st);
+    delStack(st);
+    delBoard(bd);
     return 0;
 }
