@@ -2,12 +2,23 @@
 #include "stack.h"
 #include <stdio.h>
 
+/* Faz o backtrack e acha a sequência *
+ * de movimentos (se existir)         */
 int solve(board bd, stack st)
 {
     board target = copyBoard(bd);
  
     move pop, mv;
-    int i, d, x, y;
+    int i, d, x, y, pc, hl, cpc, chl;
+
+    pc = hl = 0;
+    for(i = 0; i < bd.sx*bd.sy; i++)
+    {
+        if(bd.data[i] ==  1) pc++;
+        if(bd.data[i] == -1) hl++;
+    }
+    cpc = pc;
+    chl = hl;
 
     invertBoard(target);
 
@@ -17,7 +28,7 @@ int solve(board bd, stack st)
     do {
         for(i = pop.i; i < bd.sx*bd.sy; i++)
         {
-            for(d = pop.d; d < 4 && (bd.data[i] == 1 || 1); d++)
+            for(d = pop.d; d < 4 && bd.data[i] == 1; d++)
             {
 				pop.d = 0;
                 getXYBoard(bd, i, &x, &y);
@@ -27,11 +38,13 @@ int solve(board bd, stack st)
                 if(applyMove(bd, mv, 1))
                 {
                     pushStack(st, mv);
-                    if(eqBoard(target, bd))
-					{
-						delBoard(target);
-						return 1;
-					}
+                    cpc--;
+                    chl++;
+                    if(chl == pc && cpc == hl && eqBoard(target, bd))
+                    {
+                        delBoard(target);
+                        return 1;
+                    }
                     i = 0;
                     d = -1;
                 }
@@ -39,12 +52,17 @@ int solve(board bd, stack st)
         }
         mv = popStack(st);
         undoMove(bd, mv);
+        cpc++;
+        chl--;
         pop = nextMove(mv);
     } while (pop.i >= 0);
 	delBoard(target);
     return 0;
 }
 
+/* Imprime os movimentos restantes na  *
+ * stack no formato da saida especifi- *
+ * cada.                               */
 void printStack(board bd, stack st)
 {
     move mv;
@@ -57,6 +75,7 @@ void printStack(board bd, stack st)
     }
 }
 
+/* Main - Le entrada e chama as funcoes */
 int main()
 {
     int tmp, tmp2, sx, sy, x, y;
