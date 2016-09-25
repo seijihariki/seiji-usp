@@ -30,7 +30,7 @@ int solve(board bd, stack st)
         {
             for(d = pop.d; d < 4 && bd.data[i] == 1; d++)
             {
-				pop.d = 0;
+                pop.d = 0;
                 getXYBoard(bd, i, &x, &y);
 
                 mv = getMove(bd, x, y, d);
