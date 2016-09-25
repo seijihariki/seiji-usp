@@ -56,7 +56,7 @@ int solve(board bd, stack st)
         chl--;
         pop = nextMove(mv);
     } while (pop.i >= 0);
-	delBoard(target);
+    delBoard(target);
     return 0;
 }
 
@@ -94,7 +94,7 @@ int main()
         }
     }
 
-	st = newStack(100);
+    st = newStack(100);
 
     if(!solve(bd, st)) tmp = printf("Impossivel\n");
     else printStack(bd, st);
