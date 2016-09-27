@@ -3,27 +3,40 @@
 
 #include "types.h"
 
-/* Cria uma nova stack de tamanho  *
+/* Cria uma nova pilha de tamanho  *
  * inicial sz.                     *
  *                                 *
+ * Entrada:                        *
+ * sz: tamanho inicial da pilha    *
+ *                                 *
  * Retorna um ponteiro pra nova    *
- * stack caso haja sucesso, 0 caso *
+ * pilha caso haja sucesso, 0 caso *
  * contrário.                      */
 stack newStack(int sz);
 
-/* Deleta a stack, dealocando *
- * a memoria usada.           */
+/* Deleta a pilha, dealocando *
+ * a memoria usada.           *
+ *                            *
+ * Entrada:                   *
+ * st: pilha a ser deletada   */
 void delStack(stack st);
 
-/* Empilha um movimento na stack,  *
- * aumentando ela caso necessario  *
- *                                 *
- * Retorna 1 caso tenha conseguido *
- * 0 caso nao foi possivel o rea-  *
- * locamento da stack.             */
+/* Empilha um movimento na pilha,   *
+ * aumentando ela caso necessario   *
+ *                                  *
+ * Entrada:                         *
+ * st: pilha                        *
+ * mv: movimento a ser empilhado    *
+ *                                  *
+ * Retorna 1 caso tenha conseguido; *
+ * 0 caso nao foi possivel o rea-   *
+ * locamento da pilha.              */
 int pushStack(stack st, move mv);
 
-/* Desempilha um movimento na stack. *
+/* Desempilha um movimento na pilha. *
+ *                                   *
+ * Entrada:                          *
+ * st: pilha                         *
  *                                   *
  * Retorna o movimento retirado.     */
 move popStack(stack st);

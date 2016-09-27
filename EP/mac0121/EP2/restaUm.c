@@ -3,13 +3,21 @@
 #include <stdio.h>
 
 /* Faz o backtrack e acha a sequência *
- * de movimentos (se existir)         */
+ * de movimentos (se existir)         *
+ *                                    *
+ * Entrada:                           *
+ * bd: mesa original                  *
+ * st: pilha a ser usada no algoritmo *
+ *                                    *
+ * Retorna 1 caso tenha conseguido; 0 *
+ * caso contrario.                    */
 int solve(board bd, stack st)
 {
     board target = copyBoard(bd);
  
     move pop, mv;
-    int i, d, x, y, pc, hl, cpc, chl;
+    int i, d, x, y;
+    int pc, hl, cpc, chl;
 
     pc = hl = 0;
     for(i = 0; i < bd.sx*bd.sy; i++)
@@ -26,9 +34,9 @@ int solve(board bd, stack st)
     pop.d = 0;
 
     do {
-        for(i = pop.i; i < bd.sx*bd.sy; i++)
+        for(i = pop.i; i < bd.sx*bd.sy && cpc >= hl; i++)
         {
-            for(d = pop.d; d < 4 && bd.data[i] == 1; d++)
+            for(d = pop.d; d < 4 && bd.data[i] == 1 && cpc >= hl; d++)
             {
                 pop.d = 0;
                 getXYBoard(bd, i, &x, &y);
@@ -62,7 +70,11 @@ int solve(board bd, stack st)
 
 /* Imprime os movimentos restantes na  *
  * stack no formato da saida especifi- *
- * cada.                               */
+ * cada.                               *
+ *                                     *
+ * Entrada:                            *
+ * bd: mesa                            *
+ * st: pilha com os movimentos         */
 void printStack(board bd, stack st)
 {
     move mv;

@@ -1,5 +1,6 @@
 #include "board.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 board newBoard(int sx, int sy)
 {
@@ -36,7 +37,7 @@ board delBoard(board bd)
 
 void printBoard(board bd)
 {
-    int x, y, i;
+    int x, y, i = 0;
     for(y = 0; y < bd.sy; y++)
     {
         for(x = 0; x < bd.sx - 1; x++)
