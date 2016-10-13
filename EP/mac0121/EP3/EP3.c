@@ -3,58 +3,82 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#define swap int tmp;
 typedef char bool;
 const bool true = 1;
 const bool false = 0;
 
-int compare (const void * a, const void * b)
-{
-	  return ( *(int*)a - *(int*)b );
-}
-
-void ordenateOdd(cvector list, int sz)
+void sortOdd(cvector list, stack moves)
 {
 	bool changed;
-	int i;
-	int k;
+	int i, k;
 	do {
 		changed = false;
-		for(i = 0; i < sz - 1; i++)
+		for(i = 0; i < list->sz - 1; i++)
 		{
-			if(i < sz - 2 && atCVector(list, i) > atCVector(list, i + 2)) 
+			if(i < list->sz - 2 && atCVector(list, i) > atCVector(list, i + 2)) 
 			{
 				threeRotate(list, i);
+                pushStack(moves, i);
 				changed = true;
 			}
 			else if(atCVector(list, i) > atCVector(list, i + 1))
 			{
-				for(k = 0; k < (sz + 1)/2; k++) 
+				for(k = 0; k < (list->sz + 1)/2; k++) 
 				{
 					threeRotate(list, i + 2*k);
-					printf("Rotating %d\n", i + 2*k);
+                    pushStack(moves, i + 2*k);
+                    changed = true;
 				}
-				for(k -= 2; k >= 0; k--) threeRotate(list, i + 2*k);
-				changed = true;
+				for(k -= 2; k >= 0; k--)
+                {
+                    threeRotate(list, i + 2*k);
+                    pushStack(moves, i + 2*k);
+                    changed = true;
+                }
 			}
 		}
 	} while(changed);
 }
 
-void ordenateEven(cvector list, int sz)
+void bubble3(cvector list, int start, stack moves)
+{
+    int i, j;
+    for(i = start; i < list->sz - 2; i += 2)
+    {
+        for(j = i; j < list->sz - 2; j += 2)
+        {
+            if(atCVector(list, j) > atCVector(list, j + 2))
+            {
+                threeRotate(list, j);
+                pushStack(moves, j);
+            }
+        }
+    }
+}
+
+bool sortEven(cvector list, stack moves)
 {
 	int i;
-	int* ordered = malloc(sz*sizeof(int));
-	for(i = 0; i < sz; i++) ordered[i] = atCVector(list, i);
-	qsort(ordered, sz, sizeof(int), compare);
-	
+    bool ordered = true;
+    bubble3(list, 0, moves);
+    bubble3(list, 1, moves);
+    for(i = 0; i < list->sz - 1; i++)
+    {
+        if(atCVector(list, i) > atCVector(list, i + 1))
+            ordered = false;
+    }
+    return ordered;
 }
 
 int main()
 {
-	int sz;
-	int i;
+	int sz, i;
 	cvector list;
+    stack moves;
 	scanf("%d", &sz);
+
+    moves = newStack(10);
 
 	list = newCVector(sz);
 
@@ -65,12 +89,19 @@ int main()
 		setCVector(list, i, tmp);
 	}
 
-	if(sz % 2) ordenateOdd(list, sz);
+	if(sz % 2) sortOdd(list, moves);
+    else
+    {
+        if(!sortEven(list, moves))
+        {
+            printf("Nao e possivel.\n");
+            return 0;
+        }
+    }
 
-	for(i = 0; i < sz; i++)
+	for(i = 0; i < moves->top; i++)
 	{
-		printf("%d ", atCVector(list, i));
+		printf("%d\n", moves->data[i]);
 	}
-	printf("\n");
 	return 0;
 }
