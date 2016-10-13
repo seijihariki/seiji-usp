@@ -1,9 +1,6 @@
 #ifndef TYPES_H
 #define TYPES_H
 
-typedef struct cvector_s *cvector;
-typedef struct stack_s *stack;
-
 /* Struct do objeto de stack.         *
  * data: Dados armazenados na stack   *
  * top: Topo atual na stack           *
@@ -18,8 +15,10 @@ struct stack_s {
  * data: Dados do vetor                *
  * sx: Tamanho do vetor                */
 struct cvector_s {
-    char *data;
+    int *data;
     int sz;
 };
 
+typedef struct cvector_s *cvector;
+typedef struct stack_s *stack;
 #endif

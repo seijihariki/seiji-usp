@@ -3,7 +3,7 @@
 
 cvector newCVector(int sz)
 {
-    cvector ret = (cvector) malloc(sizeof(cvector_s));
+    cvector ret = (cvector) malloc(sizeof(struct cvector_s));
     if(!ret) return ret;
     ret->data = (int*) malloc(sizeof(int)*sz);
     ret->sz = 0;
@@ -14,10 +14,10 @@ cvector newCVector(int sz)
 
 void delCVector(cvector cv)
 {
-    if(!ret) return;
-    free(ret->sz);
-    free(ret);
-    ret = 0;
+    if(!cv) return;
+    free(cv->data);
+    free(cv);
+    cv = 0;
 }
 
 int atCVector(cvector cv, int i)
@@ -39,6 +39,6 @@ void threeRotate(cvector cv, int i)
     int tmp;
     if(i < 0 || !cv) return;
     tmp = atCVector(cv, i0);
-    setCVector(cv, i0, at(cv, i2));
+    setCVector(cv, i0, atCVector(cv, i2));
     setCVector(cv, i2, tmp);
 }

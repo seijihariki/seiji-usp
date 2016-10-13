@@ -41,11 +41,7 @@ int pushStack(stack st, int i)
 
 int popStack(stack st)
 {
-    int ret;
-    ret.i = -1;
-    ret.d = -1;
-
-    if(!st->top) return ret;
+    if(!st->top) return -1;
 
     return st->data[--st->top];
 }

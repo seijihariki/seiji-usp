@@ -3,12 +3,15 @@
 
 #include "types.h"
 
-/* Cria um novo vetor circular de  *
- * tamanho sz.                     *
- *                                 *
- * Retorna um ponteiro pro novo    *
- * vetor caso haja sucesso, 0 caso *
- * contrario.                      */
+/* Cria um novo vetor circular de       *
+ * tamanho sz.                          *
+ *                                      *
+ * Params:                              *
+ * sz: Tamanho do vetor a ser criado    *
+ *                                      *
+ * Retorna um ponteiro pro novo         *
+ * vetor caso haja sucesso, 0 caso      *
+ * contrario.                           */
 cvector newCVector(int sz);
 
 /* Deleta a stack, dealocando *
