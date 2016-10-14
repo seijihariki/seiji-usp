@@ -32,9 +32,12 @@ int pushStack(stack st, int i)
     {
         int *tmp = (int*) realloc(st->data, 2*st->max*sizeof(int));
         if (!tmp) return 0;
-        else st->data = tmp;
+        else
+        {
+            st->data = tmp;
+            st->max *= 2;
+        }
     }
-
     st->data[st->top++] = i;
     return 1;
 }
