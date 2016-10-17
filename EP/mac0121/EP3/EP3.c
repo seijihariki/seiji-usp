@@ -3,15 +3,33 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define swap int tmp;
+
 typedef char bool;
 const bool true = 1;
 const bool false = 0;
 
+/* Sorts the vector when it has an odd size *
+ *                                          *
+ * Param:                                   *
+ * list: Circular vector                    *
+ * moves: Stack of moves                    */
 void sortOdd(cvector list, stack moves)
 {
     bool changed;
-    int i, k;
+    int i, j, k;
+
+    for(i = 0; i < list->sz - 2; i++)
+    {
+        for(j = i; j < list->sz - 2; j++)
+        {
+            if(atCVector(list, j) > atCVector(list, j + 2))
+            {
+                threeRotate(list, j);
+                pushStack(moves, j);
+            }
+        }
+    }
+
     do {
         changed = false;
         for(i = 0; i < list->sz - 1; i++)
@@ -41,6 +59,15 @@ void sortOdd(cvector list, stack moves)
     } while(changed);
 }
 
+/* Sorts the vector when it has an even size    *
+ *                                              *
+ * Param:                                       *
+ * list: Circular vector                        *
+ * moves: Stack of moves                        *
+ *                                              *
+ * Returns:                                     *
+ * True if could be ordered, false otherwise    */
+
 bool sortEven(cvector list, stack moves)
 {
     int i, j;
@@ -65,12 +92,15 @@ bool sortEven(cvector list, stack moves)
     return ordered;
 }
 
+/* Main function. Handles IO and executes the sorting functions */
+
 int main()
 {
     int sz, i;
     cvector list;
     stack moves;
     if(!scanf("%d", &sz)) return -1;
+    if(sz < 0) return -1;
 
     moves = newStack(10);
 
@@ -84,13 +114,10 @@ int main()
     }
 
     if(sz % 2) sortOdd(list, moves);
-    else
+    else if(!sortEven(list, moves))
     {
-        if(!sortEven(list, moves))
-        {
-            printf("Nao e possivel.\n");
-            return 0;
-        }
+        printf("Nao e possivel.\n");
+        return 0;
     }
 
     for(i = 0; i < moves->top; i++)
