@@ -1,7 +1,7 @@
 CC:=gcc
 CFLAGS:=-Wall -pedantic -O2 -ansi
 
-EP3: EP3.o cvector.o stack.o 
+ep3: tresReversao.o cvector.o stack.o 
 	$(CC) $(CFLAGS) -o $@ $^
 
 # General formulas (for making objects)
