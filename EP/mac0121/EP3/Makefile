@@ -1,5 +1,5 @@
 CC:=gcc
-CFLAGS:=-Wall -pedantic -O2 -ansi
+CFLAGS:=-Wall -pedantic -g -ansi
 
 ep3: tresReversao.o cvector.o stack.o 
 	$(CC) $(CFLAGS) -o $@ $^
