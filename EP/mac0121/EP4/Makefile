@@ -1,7 +1,8 @@
 CC:=gcc
 CFLAGS:=-Wall -pedantic -O2 -ansi
+DEPS:= tabelaSimbolo_AB.o tabelaSimbolo_LD.o tabelaSimbolo_LO.o tabelaSimbolo_VD.o tabelaSimbolo_VO.o
 
-EP3: EP3.o cvector.o stack.o 
+tabelaSimbolo: tabelaSimbolo.o $(DEPS)
 	$(CC) $(CFLAGS) -o $@ $^
 
 # General formulas (for making objects)
