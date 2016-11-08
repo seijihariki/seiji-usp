@@ -10,7 +10,8 @@ vector vect;
 void insert_VD(char* key, int order)
 {
     string key_str = makeString(key);
-    for (int i = 0; i < vect.top; i++)
+    int i;
+    for (i = 0; i < vect.top; i++)
     {
         if (!str_compare(vect.data[i].key, key_str))
         {
@@ -52,6 +53,7 @@ int cmpCnt(const void *a, const void *b)
 void visit_VD(void (*exec)(char*, int), int order)
 {
     qsort(vect.data, vect.top, sizeof(vector_item), order?cmpCnt:cmpKey);
-    for (int i = 0; i < vect.top; i++)
+    int i;
+    for (i = 0; i < vect.top; i++)
         exec(vect.data[i].key.c_str, vect.data[i].cnt);
 }

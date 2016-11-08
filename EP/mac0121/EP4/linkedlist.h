@@ -9,4 +9,4 @@ node *insertNodeLast (llist *list, char *key);
 node *insertNodeByKey (llist *list, char  *key);
 node *insertNodeByCnt (llist *list, char  *key);
 
-#endif // LINKEDLIST_H
+#endif 

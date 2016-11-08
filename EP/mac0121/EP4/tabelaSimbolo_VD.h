@@ -5,4 +5,4 @@ void insert_VD(char* key, int order);
 
 void visit_VD(void (*exec)(char*, int), int order);
 
-#endif // TABELA_S_VD_H
+#endif

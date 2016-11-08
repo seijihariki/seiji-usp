@@ -6,12 +6,12 @@
 
 typedef struct node_s node;
 
-typedef struct node_s 
+struct node_s 
 {
     string key;
     int cnt;
     node *next, *last;
-} node;
+};
 
 typedef node* llist;
 
@@ -27,4 +27,26 @@ typedef struct vect_s
     int top, max;
 } vector;
 
-#endif // TYPES_H
+enum implementation_e
+{
+    VO,
+    VD,
+    LO,
+    LD,
+    AB,
+    NONE
+};
+
+typedef enum implementation_e implementation;
+
+typedef struct b_node_s b_node;
+
+struct b_node_s
+{
+    string key;
+    int cnt;
+    b_node *lchild, *rchild;
+};
+
+typedef b_node* bin_tree;
+#endif

@@ -14,7 +14,6 @@ string makeString(char* c_str)
 
 string str_append(string *str1, string str2)
 {
-    string str;
     int len1 = str1->len;
     int len2 = str2.len;
     int len = len1 + len2;

@@ -1,4 +1,4 @@
-#include "tabelaSimbolo_VD.h"
+#include "tabelaSimbolo_LO.h"
 
 #include "str.h"
 #include "linkedlist.h"
@@ -6,13 +6,13 @@
 
 llist list;
 
-void insert_VD(char* key, int order)
+void insert_LO(char* key, int order)
 {
     if (order) insertNodeByCnt(&list, key);
     else insertNodeByKey(&list, key);
 }
 
-void visit_VD(void (*exec)(char*, int), int order)
+void visit_LO(void (*exec)(char*, int), int order)
 {
     node *currnode = list;
     while (currnode)

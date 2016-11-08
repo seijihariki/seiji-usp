@@ -19,4 +19,5 @@ string str_delete(string *str);
 
 int str_compare(string str1, string str2);
 
-#endif // STR_H
+#endif
+
