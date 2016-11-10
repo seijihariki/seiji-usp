@@ -29,7 +29,7 @@ void insert_VD(char* key, int order)
     }
     
     vect.data[vect.top].key = key_str;
-    vect.data[vect.top++].cnt = 0;
+    vect.data[vect.top++].cnt = 1;
 }
 
 int cmpKey(const void *a, const void *b)

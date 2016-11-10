@@ -25,7 +25,7 @@ node *findByKey (llist list, char *key)
 
 node *insertNodeLast (llist *list, char *key)
 {
-    if (list)
+    if (*list)
     {
         string key_str = makeString(key);
         node *currnode = *list;
@@ -39,29 +39,32 @@ node *insertNodeLast (llist *list, char *key)
 
         if (currnode)
         {
+            currnode->cnt++;
             str_delete(&key_str);
             return currnode;
         } else {
             lastnode->next = newNode(key);
+            lastnode->next->cnt++;
             lastnode->next->last = lastnode;
             str_delete(&key_str);
             return lastnode->next;
         }
     } else {
-        return *list = newNode(key); 
+        *list = newNode(key);
+        (*list)->cnt++;
     }
 }
 
 node *insertNodeByKey (llist *list, char  *key)
 {
-    if (list)
+    if (*list)
     {
         string key_str = makeString(key);
         node *currnode = *list;
-        node *lastnode;
-        int lastcmp = 0;
+        node *lastnode = 0;
+        int lastcmp = -1;
         
-        while (currnode && (lastcmp = str_compare(currnode->key, key_str)) <= 0)
+        while (currnode && (lastcmp = str_compare(currnode->key, key_str)) < 0)
         {
             lastnode = currnode;
             currnode = currnode->next;
@@ -73,14 +76,26 @@ node *insertNodeByKey (llist *list, char  *key)
             currnode->cnt++;
             return currnode;
         } else {
-            lastnode->next = newNode(key);
-            str_delete(&key_str);
-            lastnode->next->cnt++;
-            lastnode->next->next = currnode;
-            if (lastnode->next->next)
-                lastnode->next->next->last = lastnode->next;
-            lastnode->next->last = lastnode;
-            return lastnode->next;
+            if (lastnode)
+            {
+                lastnode->next = newNode(key);
+                str_delete(&key_str);
+                lastnode->next->cnt++;
+                lastnode->next->next = currnode;
+                if (lastnode->next->next)
+                    lastnode->next->next->last = lastnode->next;
+                lastnode->next->last = lastnode;
+                return lastnode->next;
+            } else {
+                *list = newNode(key);
+                str_delete(&key_str);
+                (*list)->cnt++;
+                (*list)->next = currnode;
+                if ((*list)->next)
+                    (*list)->next->last = *list;
+                (*list)->last = (*list);
+                return *list;
+            }
         }
     } else {
         *list = newNode(key);
@@ -91,7 +106,7 @@ node *insertNodeByKey (llist *list, char  *key)
 
 node *insertNodeByCnt (llist *list, char *key)
 {
-    if (list)
+    if (*list)
     {
         node *result = findByKey(*list, key);
 
@@ -100,11 +115,12 @@ node *insertNodeByCnt (llist *list, char *key)
             node* old_head = *list;
             *list = newNode(key);
             (*list)->next = old_head;
+            old_head->last = *list;
             (*list)->cnt++;
             return *list;
         } else {
             result->cnt++;
-            while (result->next && result->cnt < result->next->cnt)
+            while (result->next && result->cnt > result->next->cnt)
             {
                 node *prev, *next, *next2;
                 prev = result->last;

@@ -13,14 +13,54 @@ void insert_LD(char* key, int order)
 
 void visit_LD(void (*exec)(char*, int), int order)
 {
-    node *i, *j;
+    node *i, *j, *tmp;
+    node *ci, *cj;
+    node *liptr, *niptr, *ljptr, *njptr;
     for (i = list; i->next; i = i->next)
     {
-        for (j = i->next; j->next; j = j->next)
+        for (j = i->next; j; j = j->next)
         {
+            if ((!order && str_compare(i->key, j->key) > 0
+                        || (order && i->cnt > j->cnt)))
+            {
+                ci = i;
+                cj = j;
+                liptr = i->last;
+                njptr = j->next;
 
+                if (njptr)
+                    njptr->last = ci;
+                if (liptr)
+                    liptr->next = cj;
+
+                if (i->next == j)
+                {
+                    ci->last = cj;
+                    cj->next = ci;
+                ci->next = njptr;
+                cj->last = liptr;
+                } else {
+                    niptr = i->next;
+                    ljptr = j->last;
+
+                    ci->last = ljptr;
+                ci->next = njptr;
+                cj->last = liptr;
+                    cj->next = niptr;
+
+                    if (ljptr)
+                        ljptr->next = ci;
+                    if (niptr)
+                        niptr->last = cj;
+                }
+                tmp = i;
+                i = j;
+                j = tmp;
+            }
         }
     }
+
+    printf("teste\n");
     node *currnode = list;
     while (currnode)
     {

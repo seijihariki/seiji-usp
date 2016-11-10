@@ -20,6 +20,7 @@ void insert_AB(char* key, int order)
         tree->key = key_str;
         tree->cnt = 1;
         tree->lchild = tree->rchild = 0;
+        return;
     }
 
     current = tree;
@@ -86,10 +87,10 @@ int make_vec_rec(b_node ***nodes, int *cnt, int *max, bin_tree subtree)
         make_vec_rec(nodes, cnt, max, subtree->lchild);
     if (*cnt >= *max)
     {
-        *max = 2**max + 1;
-        **nodes = realloc(nodes, sizeof(b_node*)**max);
+        *max = 2*(*max) + 1;
+        *nodes = realloc(*nodes, sizeof(b_node*)*(*max));
     }
-    (*nodes)[*cnt++] = subtree;
+    (*nodes)[(*cnt)++] = subtree;
     if (subtree->rchild)
         make_vec_rec(nodes, cnt, max, subtree->rchild);
 
@@ -98,7 +99,10 @@ int make_vec_rec(b_node ***nodes, int *cnt, int *max, bin_tree subtree)
 
 int compare(const void* a, const void* b)
 {
-    return ((b_node*)a)->cnt - ((b_node*)b)->cnt;
+    b_node* node1 = *((b_node**)a);
+    b_node* node2 = *((b_node**)b);
+    if (node1->cnt - node2->cnt) return node1->cnt - node2->cnt;
+    return str_compare(node1->key, node2->key);
 }
 
 void visit_AB(void (*exec)(char*, int), int order)
