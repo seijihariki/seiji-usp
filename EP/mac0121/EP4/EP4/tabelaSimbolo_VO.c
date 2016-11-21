@@ -18,20 +18,20 @@ void insert_VO(char* key, int order)
     {
         int compar_result = str_compare(vect.data[i].key, key_str);
 
-        if (first_gt1 < 0 && vect.data[i].cnt > 1)
+        if (first_gt1 < 0 && vect.data[i].cnt == 1)
             first_gt1 = i;
 
         if (!compar_result)
         {
             vect.data[i].cnt++;
             str_delete(&key_str);
-            while (order && i < vect.top - 1
-                    && vect.data[i + 1].cnt < vect.data[i].cnt)
+            while (order && i > 0
+                    && vect.data[i - 1].cnt < vect.data[i].cnt)
             {
                 vector_item item = vect.data[i];
-                vect.data[i] = vect.data[i + 1];
-                vect.data[i + 1] = item;
-                i++;
+                vect.data[i] = vect.data[i - 1];
+                vect.data[i - 1] = item;
+                i--;
             }
             return;
         } else if (compar_result > 0 && !order)
@@ -60,4 +60,12 @@ void visit_VO(void (*exec)(char*, int), int order)
     int i;
     for (i = 0; i < vect.top; i++)
         exec(vect.data[i].key.c_str, vect.data[i].cnt);
+}
+
+void destroy_VO()
+{
+    int i;
+    for (i = 0; i < vect.top; i++)
+        str_delete(&vect.data[i].key);
+    free(vect.data);
 }

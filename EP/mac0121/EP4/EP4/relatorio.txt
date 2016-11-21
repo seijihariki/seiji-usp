@@ -1,0 +1,81 @@
+Relatório de Victor Seiji Hariki, nº USP: 9793694, para o EP4
+
+
+|======================  Resultados empíricos:  ==============================|
+
+Os tempos foram medidos a partir de "Grimms' Fairy Tales", baixado de
+http://www.gutenberg.org/ebooks/2591/2591.txt , no meu notebook. Foi
+usado o programa time da seguinte maneira:
+
+'time $(ep4 2591.txt AB A > /dev/null)'
+
+, e pegando o tempo de 'user'.
+
+Tempos:
+
+Árvore binária    : Alfabética: 0.088s
+                    Frequência: 0.036s
+
+Lista desordenada : Alfabética: 0.824s
+                    Frequência: 0.692s
+
+Lista ordenada    : Alfabética: 2.476s
+                    Frequência: 0.584s
+
+Vetor desordenado : Alfabética: 0.676s
+                    Frequência: 0.584s
+
+Vetor ordenado    : Alfabética: 2.012s
+                    Frequência: 0.768s
+
+|===========================   Análise:  ====================================|
+
+Em geral, os tempos foram, em ordem crescente, Árvore binária, Vetor desorde-
+nado, Lista desordenada, Vetor ordenado, Vetor desordenado. Há também uma di-
+ferença visível no tempo entre ordenação alfabética e de frequência. Tal con-
+traste provavelmente é devido à natureza de strings e inteiros, pois para o
+primeiro, é necessária a comparação de letra por letra, enquanto o inteiro é
+um tipo primitivo, e possui comparação eficiente em tempo constante.
+
+Já a diferença entre algoritmos é explicada pela diferença entre suas comple-
+xidades.
+
+Árvore binária    : Inserção: O(log n), a profundidade da árvore
+                    Visita  : O(n*log n), a profundidade, para todos os items
+
+Lista desordenada : Inserção: O(1) para alfabética, pois não é necessário man-
+/tê-la ordenada, e O(n) para frequência, pra inserir no último elemento.
+                    Visita  : O(n²), para ordená-la usando uma variação de
+/selection sort, e imprimir
+
+Lista ordenada    : Inserção: O(n/2), ou O(n) em média, para encontrar o local
+/para inserção
+                    Visita  : O(n), pois a lista já está ordenada
+
+Vetor desordenado : Inserção: O(1), pois não é necessário mantê-la ordenada
+                    Visita  : O(n*log n), para ordená-lo por qsort, e imprimir
+
+Vetor ordenado    : Inserção: O(n) em média, para encontrar o local e mover
+/os itens para o fim do vetor e realizar a inserção
+                    Visita  : O(n), pois o vetor já está ordenado
+
+Assim, é possível visualizar porque a Árvore binária é a mais rápida. A dife-
+rença entre os ordenados e desordenados também é explicada. Quando há a inser-
+ção de n items em  um dos ordenados (O(n/2)), é executada a inserção n vezes,
+e assim a complexidade geral fica O(n²/2 + n), out O(n²). Nas desordenadas,
+por terem inserção consante, ficam O(n + n*log n), O(n*log n). Apesar da lista
+desordenada ter ordenação O(n²), as comparações entre strings são feitas bem
+menos frequentemente, sendo assim ,mais rápido. Por fim, os com vetor são em
+geral mais rápidas que os com lista ligada pelo fato que percorrer um ponteiro
+leva mais tempo (carregar variáveis da RAM, pois não estão na linha de cache
+adjacente, mudaro ponteiro, e carregar a próxima) que apenas fazer uma multi-
+plicação para o acesso aleatório do vetor (E como é um vetor, há grandes blo-
+cos de items na mesma linha de cache).
+
+|===========================   Conclusão:  ==================================|
+
+A árvore binária é a mais eficiente, mas caso não seja possível utilizá-la, é
+mais eficiente usar uma estrutura de dados de rápido acesso, como o vetor.
+Listas ligadas não são boas para casos onde há muitas operações com itens in-
+termediários, mas provavelmente ganharia de vetores no caso da inserção e re-
+moção serem realizadas nas suas extremidades.

@@ -5,4 +5,6 @@ void insert_VD(char* key, int order);
 
 void visit_VD(void (*exec)(char*, int), int order);
 
+void destroy_VD();
+
 #endif

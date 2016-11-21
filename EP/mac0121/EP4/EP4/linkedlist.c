@@ -29,7 +29,7 @@ node *insertNodeLast (llist *list, char *key)
     {
         string key_str = makeString(key);
         node *currnode = *list;
-        node *lastnode;
+        node *lastnode = 0;
         
         while (currnode && str_compare(currnode->key, key_str))
         {
@@ -52,6 +52,7 @@ node *insertNodeLast (llist *list, char *key)
     } else {
         *list = newNode(key);
         (*list)->cnt++;
+        return *list;
     }
 }
 
@@ -109,34 +110,35 @@ node *insertNodeByCnt (llist *list, char *key)
     if (*list)
     {
         node *result = findByKey(*list, key);
-
+        node *currnode = 0;
         if (!result)
         {
-            node* old_head = *list;
-            *list = newNode(key);
-            (*list)->next = old_head;
-            old_head->last = *list;
-            (*list)->cnt++;
+            currnode = *list;
+            while (currnode->next) currnode = currnode->next;
+            currnode->next = newNode(key);
+            currnode->next->last = currnode;
+            currnode->next->cnt++;
             return *list;
         } else {
             result->cnt++;
-            while (result->next && result->cnt > result->next->cnt)
+            while (result->last && (result->cnt > result->last->cnt))
             {
-                node *prev, *next, *next2;
+                node *prev2, *prev, *next;
+                prev2 = result->last->last;
                 prev = result->last;
                 next = result->next;
-                next2 = next->next;
 
-                if (!prev) *list = next;
-                else prev->next = next;
+                if (!prev2) *list = result;
+                else prev2->next  = result;
 
-                next->last = prev;
-                next->next = result;
+                if (next)
+                    next->last = prev;
 
-                result->last = next;
-                result->next = next2;
+                prev->last = result;
+                prev->next = next;
 
-                if (next2) next2->last = result;
+                result->last = prev2;
+                result->next = prev;
             }
             return result;
         }
