@@ -17,4 +17,6 @@ void undo(int x, int y, Game game);
 void reset(Game game);
 void freeGame(Game game);
 
+void printGame(Game game);
+
 #endif

@@ -1,8 +1,9 @@
 CC:=gcc
-CFLAGS:=-Wall -pedantic -O2 -ansi
-DEPS:= game.o
+CFLAGS:=-Wall -pedantic -ansi -g
+#-O2
+DEPS:= player.o game.o
 
-ep5: player.o $(DEPS)
+ep5: main.o $(DEPS)
 	$(CC) $(CFLAGS) -o $@ $^
 
 # General formulas (for making objects)

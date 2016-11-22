@@ -15,25 +15,25 @@ float max(float a, float b)
 
 float avail_gamestate(Game game)
 {
-    return 1;
+    return ;
 }
 
-// Uses minimax to calculate next move.
-// (depth 4, < 197 children each node)
-//
-// DEPTH:                  LAYER TYPE: 
-//
-// 1                 o     MAX
-//                  / \
-//                 /   \
-// 2               o   o   MIN
-//                / \ / \
-// 3              o o o o  MAX
-//                . . . .
-//                . . . .
-//                . . . .
+/* Uses minimax to calculate next move.                                     *
+ * (depth 4, < 197 children each node)                                      *
+ *                                                                          *
+ * DEPTH:                  LAYER TYPE:                                      *
+ *                                                                          *
+ * 1                 o     MAX                                              *
+ *                  / \                                                     *
+ *                 /   \                                                    *
+ * 2               o   o   MIN                                              *
+ *                / \ / \                                                   *
+ * 3              o o o o  MAX                                              *
+ *                . . . .                                                   *
+ *                . . . .                                                   *
+ *                . . . .                                                   */
 
-float minimax_recursive (int depth, float alpha, float beta, char ismax, Game game, int *child)
+float minimax_recursive (int depth, float alpha, float beta, char ismax, Game game, int *x, int *y)
 {
     int i, j;
     int ismin = !ismax;
@@ -41,18 +41,22 @@ float minimax_recursive (int depth, float alpha, float beta, char ismax, Game ga
 
     if (!depth) return avail_gamestate(game);
     
+    
     for (i = 0; i < s_x; i++)
     {
-        for (j = 0; j < s_y; i++)
+        for (j = 0; j < s_y; j++)
         {
             if (alpha >= beta)
                 return curr;
             if (!game->board[i][j])
             {
                 play(i, j, game);
-                float ret = minimax_recursive(depth - 1, alpha, beta, ismin, game, 0);
-                if (child && ret > curr) 
-                    *child = j + i*s_y;
+                float ret = minimax_recursive(depth - 1, alpha, beta, ismin, game, 0, 0);
+                if (x && y && ret > curr) 
+                {
+                    *x = i;
+                    *y = j;
+                }
                 curr = ismin?min(ret, curr):max(ret, curr);
                 if (ismin) beta = min(ret, beta);
                 else alpha = max(ret, alpha);
@@ -64,11 +68,7 @@ float minimax_recursive (int depth, float alpha, float beta, char ismax, Game ga
 }
 
 
-int playerNext(Game game)
+void playerNext(Game game, int *x, int *y)
 {
-    int *child = malloc(sizeof(int));
-    minimax_recursive (5, -INF, INF, 1, game, child);
-    int c = *child;
-    free(child);
-    return c;
+    minimax_recursive (5, -INF, INF, 1, game, x, y);
 }
