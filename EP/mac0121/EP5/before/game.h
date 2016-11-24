@@ -7,14 +7,11 @@
 struct game_s {
     char board[s_x][s_y];
     char next;
-    int round;
 };
 
 typedef struct game_s* Game;
 
 Game makeGame();
-int atGame(Game game, int x, int y);
-void setGame(Game game, int x, int y, int v);
 int play(int x, int y, Game game);
 void undo(int x, int y, Game game);
 void reset(Game game);
