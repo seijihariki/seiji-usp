@@ -88,23 +88,28 @@ const coords wall_patt[][10] = {
     }
 };
 
-void add_conn(Game game, int x, int y, char color, int conn)
+void add_conn(Game game, int x, int y, char color, int conn, int skip)
 {
     int i, xoff, yoff, ok;
     char enemy = (color == 'W')?'B':'W';
     Game bfs = (color == 'W')?W_BFS:B_BFS;
 
-    if (atGame(game, x, y) < -1 || !atGame(game, x, y))
+    if (!skip)
     {
-        if (!atGame(bfs, x, y))
-            setGame(bfs, x, y, conn);
-        return;
-    } else if (atGame(game, x, y) > 0 && atGame(game, x, y) != color)
-    {
-        if (!atGame(bfs, x, y))
-            setGame(bfs, x, y, -2);
-        return;
+        if (atGame(game, x, y) < -1 || !atGame(game, x, y))
+        {
+            if (!atGame(bfs, x, y))
+                setGame(bfs, x, y, conn);
+            return;
+        } else if (atGame(game, x, y) > 0 && atGame(game, x, y) != color)
+        {
+            if (!atGame(bfs, x, y))
+                setGame(bfs, x, y, -2);
+            return;
+        }
     }
+
+    setGame(bfs, x, y, -3);
 
     /* Expand to adjacent */
     for (i = 0; i < 6; i++)
@@ -112,8 +117,9 @@ void add_conn(Game game, int x, int y, char color, int conn)
         xoff = neighbors[i].x;
         yoff = neighbors[i].y;
 
-        if (atGame(game, x + xoff, y + yoff) >= 0)
-            add_conn(game, x + xoff, y + yoff, color, conn);
+        if (atGame(game, x + xoff, y + yoff) >= 0
+                && !atGame(bfs, x + xoff, y + yoff))
+            add_conn(game, x + xoff, y + yoff, color, conn, 0);
     }
 
     /* Expand bridges */
@@ -130,11 +136,10 @@ void add_conn(Game game, int x, int y, char color, int conn)
                 x + bridge_pre[i][1].x,
                 y + bridge_pre[i][1].y) != enemy;
 
-        if (ok && atGame(game, x + xoff, y + yoff) >= 0)
-            add_conn(game, x + xoff, y + yoff, color, conn);
+        if (ok && atGame(game, x + xoff, y + yoff) >= 0
+                && !atGame(bfs, x + xoff, y + yoff))
+            add_conn(game, x + xoff, y + yoff, color, conn, 0);
     }
-
-    setGame(bfs, x, y, -3);
 }
 
 void set_zero_conn(Game game)
@@ -148,14 +153,14 @@ void set_zero_conn(Game game)
     /* Adjacent && bridge to walls */
     for (i = 0; i < s_x; i++)
     {
-        add_conn(game, i,  -1, 'W', 1);
-        add_conn(game, i, s_y, 'W', 1);
+        add_conn(game, i,  -1, 'W', 1, 0);
+        add_conn(game, i, s_y, 'W', 1, 0);
     }
 
     for (i = 0; i < s_y; i++)
     {
-        add_conn(game,  -1, i, 'B', 1);
-        add_conn(game, s_x, i, 'B', 1);
+        add_conn(game,  -1, i, 'B', 1, 0);
+        add_conn(game, s_x, i, 'B', 1, 0);
     }
 
     /* Check for wall tower patterns */
@@ -171,7 +176,7 @@ void set_zero_conn(Game game)
             ok = ok && tmp != 'B' && tmp != -1;
         }
 
-        if (ok) add_conn(game, i, 2, 'W', 1);
+        if (ok) add_conn(game, i, 2, 'W', 1, 0);
 
         ok = 1;
         for (j = 0; j < 10; j++)
@@ -181,7 +186,7 @@ void set_zero_conn(Game game)
                     s_y - 3 + wall_patt[2][j].y);
             ok = ok && tmp != 'B' && tmp != -1;
         }
-        if (ok) add_conn(game, i, s_y - 3, 'W', 1);
+        if (ok) add_conn(game, i, s_y - 3, 'W', 1, 0);
     }
 
     for (i = 0; i < s_y; i++)
@@ -194,7 +199,7 @@ void set_zero_conn(Game game)
                     i + wall_patt[3][j].y);
             ok = ok && tmp != 'W' && tmp != -1;
         }
-        if (ok) add_conn(game, 2, i, 'B', 1);
+        if (ok) add_conn(game, 2, i, 'B', 1, 0);
 
         ok = 1;
         for (j = 0; j < 10; j++)
@@ -204,7 +209,7 @@ void set_zero_conn(Game game)
                     i + wall_patt[1][j].y);
             ok = ok && tmp != 'W' && tmp != -1;
         }
-        if (ok) add_conn(game, s_x - 3, i, 'B', 1);
+        if (ok) add_conn(game, s_x - 3, i, 'B', 1, 0);
     }
 }
 
@@ -223,9 +228,7 @@ void bfs(Game game, char color)
             for (j = 0; j < s_y; j++)
             {
                 if (atGame(bfs_b, i, j) == currcnt)
-                {
-                    add_conn(game, i, j, color, currcnt + 1);
-                }
+                    add_conn(game, i, j, color, currcnt + 1, 1);
             }
         }
 
