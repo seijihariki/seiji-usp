@@ -12,9 +12,13 @@ Game makeGame()
 
 int atGame(Game game, int x, int y)
 {
+    if (x == -1 || x == s_x)
+        return -1;
+    if (y == -1 || y == s_y)
+        return -1;
     if (x >= 0 && x < s_x && y >= 0 && y < s_y)
         return game->board[x][y];
-    return -1;
+    return -2;
 }
 
 void setGame(Game game, int x, int y, int v)
@@ -25,6 +29,9 @@ void setGame(Game game, int x, int y, int v)
 
 int play(int x, int y, Game game)
 {
+    if (game->round == 1 && game->board[x][y])
+        game->next = (game->next == 'W')?'B':'W'; 
+
     if (game->board[x][y])
         return 0;
     game->board[x][y] = game->next;
@@ -80,7 +87,7 @@ void printGame(Game game)
             fprintf(stderr, " ");
         for (i = 0; i < s_x; i++)
             fprintf(stderr, "%c%c",
-                    game->board[i][j]?game->board[i][j]:'-',
+                    game->board[i][j]?(char)game->board[i][j]:'-',
                     (i < s_x - 1)?' ':'\n');
     }
 }

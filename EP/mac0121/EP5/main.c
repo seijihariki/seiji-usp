@@ -9,6 +9,7 @@ int main(int argc, char **argv)
     char print = 0;
     int k;
     Game game;
+
     if (argc > 1)
         color = (argv[1][0] == 'P')?'B':'W';
     if (argc == 3)
@@ -39,9 +40,11 @@ int main(int argc, char **argv)
         while (1)
         {
             int x, y;
+            if (print) printGame(game);
             k = scanf("%d %d", &y, &x);
             if (!k) break;
             play(x, y, game);
+            if (print) printGame(game);
             playerNext(game, &x, &y);
             play(x, y, game);
             printf("%d %d\n", y, x);
