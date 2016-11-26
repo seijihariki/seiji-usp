@@ -5,9 +5,10 @@
 #define s_y 14
 
 struct game_s {
-    char board[s_x][s_y];
+    int board[s_x][s_y];
     char next;
     int round;
+    int swap;
 };
 
 typedef struct game_s* Game;

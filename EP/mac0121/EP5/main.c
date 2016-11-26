@@ -2,6 +2,7 @@
 #include "player.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(int argc, char **argv)
 {
@@ -28,12 +29,12 @@ int main(int argc, char **argv)
         {
             int x, y;
             playerNext(game, &x, &y);
-            play(x, y, game);
+            if (!play(x, y, game)) exit(-1);
             printf("%d %d\n", y, x);
             if (print) printGame(game);
             k = scanf("%d %d", &y, &x);
             if (!k) break;
-            play(x, y, game);
+            if (!play(x, y, game)) exit(-1);
             if (print) printGame(game);
         }
     } else {
@@ -43,10 +44,10 @@ int main(int argc, char **argv)
             if (print) printGame(game);
             k = scanf("%d %d", &y, &x);
             if (!k) break;
-            play(x, y, game);
+            if (!play(x, y, game)) exit(-1);
             if (print) printGame(game);
             playerNext(game, &x, &y);
-            play(x, y, game);
+            if (!play(x, y, game)) exit(-1);
             printf("%d %d\n", y, x);
         }
     }

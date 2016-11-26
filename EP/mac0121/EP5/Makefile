@@ -1,5 +1,5 @@
 CC:=gcc
-CFLAGS:=-Wall -pedantic -ansi -g
+CFLAGS:=-Wall -pedantic -ansi -g -D __DEBUG__
 #-O2
 DEPS:= player.o game.o
 
