@@ -4,6 +4,8 @@
 #include "linkedlist.h"
 #include "types.h"
 
+#include <stdlib.h>
+
 llist list;
 
 void insert_LD(char* key, int order)
@@ -16,12 +18,13 @@ void visit_LD(void (*exec)(char*, int), int order)
     node *i, *j, *tmp;
     node *ci, *cj;
     node *liptr, *niptr, *ljptr, *njptr;
+    node *currnode;
     for (i = list; i->next; i = i->next)
     {
         for (j = i->next; j; j = j->next)
         {
-            if ((!order && str_compare(i->key, j->key) > 0
-                        || (order && i->cnt > j->cnt)))
+            if (((!order && str_compare(i->key, j->key) > 0)
+                        || (order && i->cnt < j->cnt)))
             {
                 ci = i;
                 cj = j;
@@ -60,11 +63,23 @@ void visit_LD(void (*exec)(char*, int), int order)
         }
     }
 
-    printf("teste\n");
-    node *currnode = list;
+    currnode = list;
+
     while (currnode)
     {
         exec(currnode->key.c_str, currnode->cnt);
         currnode = currnode->next;
     }
+}
+
+void destroy_LD()
+{
+    node *currnode = list, *nextnode;
+    while (currnode)
+    {
+        nextnode = currnode->next;
+        str_delete(&currnode->key);
+        free(currnode);
+        currnode = nextnode;
+    }  
 }

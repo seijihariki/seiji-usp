@@ -5,4 +5,6 @@ void insert_LD(char* key, int order);
 
 void visit_LD(void (*exec)(char*, int), int order);
 
+void destroy_LD();
+
 #endif 

@@ -1,0 +1,4 @@
+-Wall
+-pedantic
+-ansi
+-O2

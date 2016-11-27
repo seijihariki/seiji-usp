@@ -33,7 +33,8 @@ void print (char* key, int cnt)
     printf("%s %d\n", key, cnt);
 }
 
-void execute (FILE *file, void (*insert)(char*, int), void (*visit)(void (*)(char*, int), int), int order)
+void execute (FILE *file, void (*insert)(char*, int),
+        void (*visit)(void (*)(char*, int), int), void (*destroy)(), int order)
 {
     char* word;
     while ((word = readWord(file)))
@@ -43,6 +44,7 @@ void execute (FILE *file, void (*insert)(char*, int), void (*visit)(void (*)(cha
     }
 
     visit(print, order);
+    destroy();
 }
 
 implementation getTableType (char *identifier)
@@ -89,19 +91,19 @@ int main (int argc, char **argv)
     switch (table_type)
     {
     case VO:
-        execute(file, insert_VO, visit_VO, tolower(*argv[3]) != 'a');
+        execute(file, insert_VO, visit_VO, destroy_VO, tolower(*argv[3]) != 'a');
         break;
     case VD:
-        execute(file, insert_VD, visit_VD, tolower(*argv[3]) != 'a');
+        execute(file, insert_VD, visit_VD, destroy_VD, tolower(*argv[3]) != 'a');
         break;
     case LO:
-        execute(file, insert_LO, visit_LO, tolower(*argv[3]) != 'a');
+        execute(file, insert_LO, visit_LO, destroy_LO, tolower(*argv[3]) != 'a');
         break;
     case LD:
-        execute(file, insert_LD, visit_LD, tolower(*argv[3]) != 'a');
+        execute(file, insert_LD, visit_LD, destroy_LD, tolower(*argv[3]) != 'a');
         break;
     case AB:
-        execute(file, insert_AB, visit_AB, tolower(*argv[3]) != 'a');
+        execute(file, insert_AB, visit_AB, destroy_AB, tolower(*argv[3]) != 'a');
         break;
     default:
         return -1;

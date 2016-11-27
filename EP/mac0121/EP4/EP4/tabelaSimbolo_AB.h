@@ -5,4 +5,6 @@ void insert_AB(char* key, int order);
 
 void visit_AB(void (*exec)(char*, int), int order);
 
+void destroy_AB();
+
 #endif

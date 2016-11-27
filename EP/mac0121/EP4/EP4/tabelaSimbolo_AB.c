@@ -101,7 +101,7 @@ int compare(const void* a, const void* b)
 {
     b_node* node1 = *((b_node**)a);
     b_node* node2 = *((b_node**)b);
-    if (node1->cnt - node2->cnt) return node1->cnt - node2->cnt;
+    if (node2->cnt - node1->cnt) return node2->cnt - node1->cnt;
     return str_compare(node1->key, node2->key);
 }
 
@@ -110,10 +110,28 @@ void visit_AB(void (*exec)(char*, int), int order)
     int i;
     if (!order) visit_rec(exec, tree);
     else {
-        b_node **nodevec;
+        b_node **nodevec = 0;
         int sz = make_vec_rec(&nodevec, 0, 0, tree);
         qsort(nodevec, sz, sizeof(b_node*), compare);
         for (i = 0; i < sz; i++)
             exec(nodevec[i]->key.c_str, nodevec[i]->cnt);
+        free (nodevec);
     }
+}
+
+void destroy_rec(bin_tree btree)
+{
+    b_node **nodevec = 0;
+    int i, sz = make_vec_rec(&nodevec, 0, 0, tree);
+    for (i = 0; i < sz; i++)
+    {
+        str_delete(&nodevec[i]->key);
+        free(nodevec[i]);
+    }
+    free(nodevec);
+}
+
+void destroy_AB()
+{
+    destroy_rec(tree);
 }

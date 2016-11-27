@@ -1,9 +1,9 @@
 CC:=gcc
-CFLAGS:=-Wall -pedantic -g
-#-O2 -ansi
-DEPS:= str.o linkedlist.o tabelaSimbolo_AB.o tabelaSimbolo_LD.o tabelaSimbolo_LO.o tabelaSimbolo_VD.o tabelaSimbolo_VO.o
+CFLAGS:=-Wall -pedantic -ansi -g
+#-O2
+DEPS:= player.o game.o
 
-tabelaSimbolo: tabelaSimbolo.o $(DEPS)
+ep5: main.o $(DEPS)
 	$(CC) $(CFLAGS) -o $@ $^
 
 # General formulas (for making objects)

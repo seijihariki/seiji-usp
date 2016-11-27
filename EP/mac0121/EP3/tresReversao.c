@@ -20,7 +20,7 @@ void sortOdd(cvector list, stack moves)
 
     for(i = 0; i < list->sz - 2; i++)
     {
-        for(j = i; j < list->sz - 2; j++)
+        for(j = 0; j < list->sz - 2; j++)
         {
             if(atCVector(list, j) > atCVector(list, j + 2))
             {
@@ -73,9 +73,9 @@ bool sortEven(cvector list, stack moves)
     int i, j;
     bool ordered = true;
 
-    for(i = 0; i < list->sz - 2; i++)
+    for(i = 0; i < list->sz - 3; i++)
     {
-        for(j = i; j < list->sz - 2; j++)
+        for(j = 0; j < list->sz - 3; j++)
         {
             if(atCVector(list, j) > atCVector(list, j + 2))
             {
@@ -84,6 +84,7 @@ bool sortEven(cvector list, stack moves)
             }
         }
     }
+
     for(i = 0; i < list->sz - 1; i++)
     {
         if(atCVector(list, i) > atCVector(list, i + 1))
@@ -122,7 +123,7 @@ int main()
 
     for(i = 0; i < moves->top; i++)
     {
-        printf("%d\n", moves->data[i]);
+        printf("%d\n", moves->data[i]%sz);
     }
     return 0;
 }
