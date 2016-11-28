@@ -20,6 +20,7 @@ typedef struct {
     int x, y;
 } coords;
 
+/* Vector of coordinate offsets to neighboring cells                        */
 const coords neighbors[] = {
     { -1,  0 },
     {  0, -1 },
@@ -29,6 +30,7 @@ const coords neighbors[] = {
     { -1,  1 }
 };
 
+/* Vector of coordinate offsets to cells capable of bridging                */
 const coords bridges[] = {
     { -1, -1 },
     {  1, -2 },
@@ -38,6 +40,7 @@ const coords bridges[] = {
     { -2,  1 }
 };
 
+/* Vector of coordinate offsets to areas that must be empty to bridge       */
 const coords bridge_pre[][2] = {
     {{  0, -1 }, { -1,  0 }},
     {{  1, -1 }, {  0, -1 }},
@@ -47,6 +50,7 @@ const coords bridge_pre[][2] = {
     {{ -1,  0 }, { -1,  1 }}
 };
 
+/* Vector of coordinate offsets to wall tower patterns                      */
 const coords wall_patt[][10] = {
     {
         { -1, -2 },
@@ -98,6 +102,13 @@ const coords wall_patt[][10] = {
     }
 };
 
+/* Marks bridges both of the enemy and the allies that can't be blocked and *
+ * also the ones that can be blocked.                                       *
+ *                                                                          *
+ * Params:                                                                  *
+ * game: Game board                                                         *
+ *                                                                          *
+ * Returns how many bridges can (and should) be protected from the enemy    */
 int mark_bridges(Game game)
 {
     int i, j, k, ok, fst, scd, xoff, yoff, has_to_protect = 0;
@@ -213,6 +224,16 @@ int mark_bridges(Game game)
     return has_to_protect;
 }
 
+/* Adds connected nodes recursively that can be played in the same round to *
+ * keep the field zero-connected.                                           *
+ *                                                                          *
+ * Params:                                                                  *
+ * game: Game board                                                         *
+ * x: x coords of the node to explore                                       *
+ * y: y coords of the node to explore                                       *
+ * color: Color of the allies                                               *
+ * conn: Which play (from now) it is expanding                              *
+ * skip: Whether it ignores initial checks or not                           */
 void add_conn(Game game, int x, int y, char color, int conn, int skip)
 {
     int i, xoff, yoff, ok;
@@ -267,6 +288,10 @@ void add_conn(Game game, int x, int y, char color, int conn, int skip)
     }
 }
 
+/* Sets initial zero-connected plays from the starting wall.                *
+ *                                                                          *
+ * Params:                                                                  *
+ * game: Game board                                                         */
 void set_zero_conn(Game game)
 {
     int i, j, ok;
@@ -340,6 +365,14 @@ void set_zero_conn(Game game)
     }
 }
 
+/* Returns minimum cost reachable as bridge or neighbor.                    *
+ *                                                                          *
+ * Params:                                                                  *
+ * field: Game field                                                        *
+ * x: x coords of the base cell to check for                                *
+ * y: y coords of the base cell to check for                                *
+ *                                                                          *
+ * Returns minimum value reachable from base cell.                          */
 int minor_from(Game field, int x, int y)
 {
     int min = 999999, i, xoff, yoff;
@@ -367,6 +400,12 @@ int minor_from(Game field, int x, int y)
     return min;
 }
 
+/* Returns the estimated 'quality' of the state for player color 'color'    *
+ *                                                                          *
+ * Params:                                                                  *
+ * color: Color of player color to check                                    *
+ *                                                                          *
+ * Returns estimated 'quality' of current state for given player.           */
 int64_t state_quality(char color)
 {
     int i;
@@ -394,6 +433,11 @@ int64_t state_quality(char color)
     return sum_w + sum_b;
 }
 
+/* Expands (does) an BFS starting from one wall, until filling the board    *
+ *                                                                          *
+ * Params:                                                                  *
+ * game: Game board                                                         *
+ * color: Color of player to do BFS for                                     */
 void BFS(Game game, char color)
 {
     int currcnt = 0, i, j;
@@ -424,6 +468,14 @@ void BFS(Game game, char color)
     }
 }
 
+/* Returns play quality, reseting and marking the boards, to simplify the   *
+ * avaliation of one play.                                                  *
+ *                                                                          *
+ * Params:                                                                  *
+ * game: Game board                                                         *
+ * color: Color of team to avaliate play quality for                        *
+ *                                                                          *
+ * Returns estimated quality of 'play' being avaliated                      */
 int64_t play_quality(Game game, char color)
 {
     reset(B_BFS);
