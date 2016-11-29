@@ -78,4 +78,13 @@ void freeGame(Game game);
  * game: Game board to print                                                */
 void printGame(Game game);
 
+/* Returns which player won, or 0 if none.                                  *
+ *                                                                          *
+ * Params:                                                                  *
+ * game: Game board                                                         *
+ * aux: Auxiliar board                                                      *
+ *                                                                          *
+ * Returns P or B, depending on the winning player. Returns 0 is none won.  */
+char wonGame(Game game, Game aux);
+
 #endif

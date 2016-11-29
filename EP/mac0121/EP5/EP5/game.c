@@ -189,3 +189,69 @@ void printGame(Game game)
         fprintf(stderr, "%s", "\033[0;0m");
 
 }
+
+typedef struct {
+    int x, y;
+} coords;
+
+/* Vector of coordinate offsets to neighboring cells                        */
+const coords neighbors_game[] = {
+    { -1,  0 },
+    {  0, -1 },
+    {  1, -1 },
+    {  1,  0 },
+    {  0,  1 },
+    { -1,  1 }
+};
+
+/* Recursively explores neighbors for checking if any won.                  *
+ *                                                                          *
+ * Params:                                                                  *
+ * game: Game board                                                         *
+ * aux: Auxiliar board                                                      *
+ * color: Color to check if won                                             *
+ * x: x coordinates of the node being explored                              *
+ * y: y coordinates of the node being explored                              *
+ *                                                                          *
+ * Returns character 'B' or 'W', if player won. else returns 0              */
+char wonGameRec(Game game, Game aux, char color, int x, int y)
+{
+    int i, xoff, yoff;
+    char ret;
+    if ((color == 'W' && y > s_y - 1) || (color == 'B' && x > s_x - 1))
+        return color;
+
+    if (atGame(game, x, y) == color && !atGame(aux, x, y))
+    {
+        setGame(aux, x, y, 1);
+        for (i = 0; i < 6; i++)
+        {
+            xoff = neighbors_game[i].x;
+            yoff = neighbors_game[i].y;
+
+            if ((ret = wonGameRec(game, aux, color, x + xoff, y + yoff)))
+                return ret;
+        }
+    }
+
+    return 0;
+}
+
+char wonGame(Game game, Game aux)
+{
+    int i;
+    for (i = 0; i < s_x; i++)
+    {
+        reset(aux);
+        if (wonGameRec(game, aux, 'W', i, 0))
+            return 'B';
+    }
+
+    for (i = 0; i < s_y; i++)
+    {
+        reset(aux);
+        if (wonGameRec(game, aux, 'B', i, 0))
+            return 'P';
+    }
+    return 0;
+}

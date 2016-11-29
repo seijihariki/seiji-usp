@@ -1,0 +1,60 @@
+Relatório de Victor Seiji Hariki, nº USP: 9793694, para o EP5
+
+|============================  Estratégia  ==================================|
+
+ A estratégia usada foi baseada principalmente na estrutura de 'pontes', que
+ são padrões do seguinte formato:
+
+                           * * * *
+                          *       *
+                         *  Vazia  *
+                  * * * *           * * * *
+                 *       *         *       *
+                * Aliada  *       * Aliada  *
+               *           * * * *           *
+                *         *       *         *
+                 *       *  Vazia  *       *
+                  * * * *           * * * *
+                         *         *
+                          *       *
+                           * * * *
+
+ A vantagem dessa formação é que, se o outro jogar tentar bloquear, colocando
+ uma peça em qualquer uma das áreas vazias, é possível completar o caminho
+ que estava sendo criado. Pelo uso delas mesmo um caminho onde não haja todas
+ as peças colocadas, é possível concluir que certo jogador obteve vitória.
+
+ Mas o que realmente importa, ao menos na minha implementação da estratégia,
+ é o fato de que são necessárias muito menos peças para a criação de um
+ caminho 'invencível' de uma parede a outra.
+
+ A implementação real da estratégia se resume em escolher a jogada que, ao
+ mesmo tempo, maximiza o número mínimo de peças inimigas para a vitória e
+ minimiza as peças aliadas necessárias para esta.
+
+|===========================   Implementação  ===============================|
+
+ O mínimo de peças necessárias para a vitória é calculada por uso de um BFS
+ (Breadth first search), executado até o tabuleiro temporário (armazenando o
+ mínimo de jogadas da cor sendo avaliada para chegar da parede à célula).
+ Este BFS toma em conta pontes e vizinhos, e provide um indicador preciso da
+ quantidade necessária de jogadas até o fim de jogo.
+
+ O algoritmo é simples: Basicamente, testa cada jogada válida e calcula esse
+ custo para a situação após ela. A que tiver uma melhor avaliação do campo,
+ depois de executada, é a jogada esolhida.
+
+ Uma exceção é o caso de haver pontes aliadas ameaçadas ou potes inimigas
+ fragilizadas. Nesses casos, necessariamente um desses pontos é escolhido,
+ ainda tomando uso da função de avaliação de estado de campo.
+
+|===========================   Resultados:  =================================|
+
+ Apesar de não jogar otimamente em certas situações, ainda assim provide um
+ desafio razoável para a grande maioria das estratégias e ideias.
+
+ Mas, há uma estratégia em específico que gostaria de mencionar contra a qual
+ o algoritmo é fraco. Ao começar a partir da parede inicial (Esquerda ou
+ superior, dependendo da cor), e avançar para a parede final, sempre colocando
+ peças adjacentes, e ziguezagueando, o algoritmo joga de forma que só poderia
+ de descrita como ruim.
